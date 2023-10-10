@@ -12,6 +12,10 @@ namespace Algorithm.Model.Schema.AHP
         /// </summary>
         public double[,] Data;
         /// <summary>
+        /// Ma trận 2 chiều chứa n tiêu chí so sánh
+        /// </summary>
+        public double[,] DataChoose;
+        /// <summary>
         /// Ma trận sau chuẩn hoá
         /// </summary>
         public double[,] NormalizedData;
@@ -23,14 +27,17 @@ namespace Algorithm.Model.Schema.AHP
         public double CI;
         public double CR;
         public int length;
+        public int choose;
         /// <summary>
         /// Biến thể hiện bộ trọng số có được chấp nhận không
         /// </summary>
         public bool isWeightSetValid;
-        public AHP(int n)
+        public AHP(int n, int m)
         {
             length = n;
+            choose = m;
             Data = new double[n, n];
+            DataChoose = new double[m,m];
             NormalizedData = new double[n, n];
             WeightSet = new double[n];
             isWeightSetValid = false;
@@ -39,7 +46,7 @@ namespace Algorithm.Model.Schema.AHP
         /// Hàm đọc dữ liệu từ 1 file csv và gán các giá trị cho mảng data trong đối tượng của class AHP
         /// </summary>
         /// <param name="csvFilePath"></param>
-        public void LoadDataFromCSV(string csvFilePath)
+        public void LoadDataFromCSV(string csvFilePath, int length)
         {
             try
             {
@@ -56,8 +63,36 @@ namespace Algorithm.Model.Schema.AHP
                     }
                 }
                 Console.WriteLine("-----------------------------------");
-                Console.WriteLine("Input Matrix");
+                Console.WriteLine("Ma trận tiêu chí");
                 printArray(Data);
+            }
+            catch (Exception ex)
+            {
+                printError(ex);
+                throw;
+            }
+        }
+        public void LoadDataChooseFromCSV(string csvFilePath, int length)
+        {
+            try
+            {
+                if (isWeightSetValid){
+                    using (var reader = new StreamReader(csvFilePath))
+                    using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture){Delimiter = ","}))
+                    {
+                        for (int row = 0; row < length; row++)
+                        {
+                            csv.Read();
+                            for (int col = 0; col < length; col++)
+                            {
+                                DataChoose[row, col] = csv.GetField<double>(col);
+                            }
+                        }
+                    }
+                    Console.WriteLine("-----------------------------------");
+                    Console.WriteLine("Ma trận lựa chọn");
+                    printArray(DataChoose);
+                }
             }
             catch (Exception ex)
             {
@@ -88,7 +123,7 @@ namespace Algorithm.Model.Schema.AHP
                     }
                 }
                 Console.WriteLine("-----------------------------------");
-                Console.WriteLine("Matrix after normalize:");
+                Console.WriteLine("Ma trận sau chuẩn hoá:");
                 printArray(NormalizedData);
             }
             catch (Exception ex)
@@ -121,7 +156,7 @@ namespace Algorithm.Model.Schema.AHP
                     WeightSet[i] = Math.Round(WeightSet[i] / totalWeight, 2);
                 }
                 Console.WriteLine("-----------------------------------");
-                Console.WriteLine("Matrix Weight Set:");
+                Console.WriteLine("Bộ trọng số:");
                 printArray(WeightSet);
             }
             catch (Exception ex)
@@ -142,7 +177,7 @@ namespace Algorithm.Model.Schema.AHP
                 WeightVector[i] = Math.Round(WeightVector[i], 2);
             }
             Console.WriteLine("-----------------------------------");
-            Console.WriteLine("Matrix Weight Vector:");
+            Console.WriteLine("Vector trọng số:");
             printArray(WeightVector);
             // Vector nhất quán
             double[] CR_Vector = new double[length];
@@ -151,7 +186,7 @@ namespace Algorithm.Model.Schema.AHP
                 CR_Vector[i] = Math.Round(WeightVector[i]/WeightSet[i], 2);
             }
             Console.WriteLine("-----------------------------------");
-            Console.WriteLine("Matrix CR Vector");
+            Console.WriteLine("Vector nhất quán");
             printArray(CR_Vector);
             Console.WriteLine("-----------------------------------");
             // Xác định LamdaMax
@@ -169,7 +204,30 @@ namespace Algorithm.Model.Schema.AHP
             {
                 isWeightSetValid = true;
             }
-            Console.WriteLine($@"Weight Set is {(isWeightSetValid ? "acceptable" : "unacceptable")}");
+            Console.WriteLine($@"Bộ trọng số {(isWeightSetValid ? "được chấp nhận" : "không được chấp nhận")}");
+        }
+        /// <summary>
+        /// Hàm tính tổng trọng số các phương án
+        /// </summary>
+        public void CalSumWeightSet()
+        {
+            // Nếu bộ trọng số không hợp lệ thì không tính tổng trọng số
+            if (isWeightSetValid)
+            {
+                // Khởi tạo mảng chứa tổng trọng số của các phương án
+                double[] sumWeightSet = new double[choose];
+                Console.WriteLine("-----------------------------------");
+                Console.WriteLine("Tổng trọng số cho từng lựa chọn");
+                // Tính tổng trọng số của mỗi phương án
+                for (int i = 0; i < choose; i++)
+                {
+                    for (int j = 0; j < choose; j++)
+                    {
+                        sumWeightSet[i] = Math.Round(sumWeightSet[i] + DataChoose[i, j] * WeightSet[j], 2);
+                    }
+                    Console.WriteLine($"Lựa chọn {i + 1} = {sumWeightSet[i]}");
+                }
+            }
         }
     }
 }
