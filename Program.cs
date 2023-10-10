@@ -1,5 +1,6 @@
 ﻿using System;
 using Algorithm.Model.Schema.AHP;
+using Algorithm.Template.AHP;
 
 namespace Algorithm
 {
@@ -8,8 +9,9 @@ namespace Algorithm
         static void Main(string[] args)
         {
             int n, m;
-            const string data = @"./Template/AHP/AHP_data.csv";
-            const string choose = @"./Template/AHP/AHP_choose.csv";
+            AHPFilePath ahpFilePath = AHPFilePath.instance;
+            string data = ahpFilePath.DATA_WINDOWS_FILEPATH;
+            string choose = ahpFilePath.CHOICE_WINDOWS_FILEPATH;
             // Program:
             Console.WriteLine("Chương trình tính AHP");
             Console.WriteLine("Bạn có bao nhiêu tiêu chí?");
