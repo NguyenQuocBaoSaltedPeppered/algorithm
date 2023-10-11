@@ -1,12 +1,31 @@
+using System.Collections.Generic;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 
 
-namespace Algorithm.Model.Schema.AHP
+namespace Algorithm.Model.Schema
 {
     public partial class AHP : CommonModel
     {
+        public AHP(int n)
+        {
+            length = n;
+            Data = new double[n, n];
+            NormalizedData = new double[n, n];
+            WeightSet = new double[n];
+            isWeightSetValid = false;
+        }
+        public AHP(int n, int m)
+        {
+            length = n;
+            choose = m;
+            Data = new double[n, n];
+            DataChoice = new double[m,m];
+            NormalizedData = new double[n, n];
+            WeightSet = new double[n];
+            isWeightSetValid = false;
+        }
         /// <summary>
         /// Ma trận 2 chiều chứa n tiêu chí so sánh
         /// </summary>
@@ -14,7 +33,7 @@ namespace Algorithm.Model.Schema.AHP
         /// <summary>
         /// Ma trận 2 chiều chứa n tiêu chí so sánh
         /// </summary>
-        public double[,] DataChoose;
+        public double[,]? DataChoice;
         /// <summary>
         /// Ma trận sau chuẩn hoá
         /// </summary>
@@ -32,21 +51,11 @@ namespace Algorithm.Model.Schema.AHP
         /// Biến thể hiện bộ trọng số có được chấp nhận không
         /// </summary>
         public bool isWeightSetValid;
-        public AHP(int n, int m)
-        {
-            length = n;
-            choose = m;
-            Data = new double[n, n];
-            DataChoose = new double[m,m];
-            NormalizedData = new double[n, n];
-            WeightSet = new double[n];
-            isWeightSetValid = false;
-        }
         /// <summary>
         /// Hàm đọc dữ liệu từ 1 file csv và gán các giá trị cho mảng data trong đối tượng của class AHP
         /// </summary>
         /// <param name="csvFilePath"></param>
-        public void LoadDataFromCSV(string csvFilePath, int length)
+        public static void LoadDataFromCSV(string csvFilePath, int length, double[,] array)
         {
             try
             {
@@ -58,13 +67,13 @@ namespace Algorithm.Model.Schema.AHP
                         csv.Read();
                         for (int col = 0; col < length; col++)
                         {
-                            Data[row, col] = csv.GetField<double>(col);
+                            array[row, col] = csv.GetField<double>(col);
                         }
                     }
                 }
-                Console.WriteLine("-----------------------------------");
-                Console.WriteLine("Ma trận tiêu chí");
-                printArray(Data);
+                // Console.WriteLine("-----------------------------------");
+                // Console.WriteLine("Ma trận tiêu chí");
+                // printArray(array);
             }
             catch (Exception ex)
             {
@@ -72,10 +81,37 @@ namespace Algorithm.Model.Schema.AHP
                 throw;
             }
         }
-        public void LoadDataChooseFromCSV(string csvFilePath, int length)
+        /// <summary>
+        /// Hàm lấy dữ liệu từ các file csv và gán cho các mảng AHP cụ thể dựa trên filePath được truyền vào
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="array"></param>
+        public static void LoadDataFromCSV(List<string> filePaths, int length, AHP[] arrays)
         {
             try
             {
+                foreach(string path in filePaths)
+                {
+                    foreach(AHP array in arrays)
+                    {
+                        LoadDataFromCSV(path, length, array.Data);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                printError(ex);
+                throw;
+            }
+        }
+        public void LoadDataChoiceFromCSV(string csvFilePath, int length)
+        {
+            try
+            {
+                if (DataChoice == null)
+                {
+                    DataChoice = new double[length, length];
+                }
                 if (isWeightSetValid){
                     using (var reader = new StreamReader(csvFilePath))
                     using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture){Delimiter = ","}))
@@ -85,13 +121,13 @@ namespace Algorithm.Model.Schema.AHP
                             csv.Read();
                             for (int col = 0; col < length; col++)
                             {
-                                DataChoose[row, col] = csv.GetField<double>(col);
+                                DataChoice[row, col] = csv.GetField<double>(col);
                             }
                         }
                     }
                     Console.WriteLine("-----------------------------------");
                     Console.WriteLine("Ma trận lựa chọn");
-                    printArray(DataChoose);
+                    printArray(DataChoice);
                 }
             }
             catch (Exception ex)
@@ -223,7 +259,7 @@ namespace Algorithm.Model.Schema.AHP
                 {
                     for (int j = 0; j < choose; j++)
                     {
-                        sumWeightSet[i] = Math.Round(sumWeightSet[i] + DataChoose[i, j] * WeightSet[j], 2);
+                        sumWeightSet[i] = Math.Round(sumWeightSet[i] + DataChoice[i, j] * WeightSet[j], 2);
                     }
                     Console.WriteLine($"Lựa chọn {i + 1} = {sumWeightSet[i]}");
                 }

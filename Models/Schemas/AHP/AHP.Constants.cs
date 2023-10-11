@@ -1,4 +1,4 @@
-namespace Algorithm.Model.Schema.AHP
+namespace Algorithm.Model.Schema
 {
     public partial class AHP
     {

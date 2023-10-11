@@ -1,5 +1,5 @@
 ﻿using System;
-using Algorithm.Model.Schema.AHP;
+using Algorithm.Model.Schema;
 using Algorithm.Template.AHP;
 
 namespace Algorithm
@@ -10,7 +10,7 @@ namespace Algorithm
         {
             int n, m;
             AHPFilePath ahpFilePath = AHPFilePath.instance;
-            string data = ahpFilePath.DATA_WINDOWS_FILEPATH;
+            string dataFilepath = ahpFilePath.DATA_WINDOWS_FILEPATH;
             string choose = ahpFilePath.CHOICE_WINDOWS_FILEPATH;
             // Program:
             Console.WriteLine("Chương trình tính AHP");
@@ -20,7 +20,11 @@ namespace Algorithm
             m = Convert.ToInt32(Console.ReadLine());
             AHP ahpArray = new AHP(n, m);
             // Đọc dữ liệu từ file
-            ahpArray.LoadDataFromCSV(data, n);
+            // ahpArray.LoadDataFromCSV(data, n);
+            AHP.LoadDataFromCSV(dataFilepath, ahpArray.length, ahpArray.Data);
+            Console.WriteLine("-----------------------------------");
+            Console.WriteLine("Ma trận tiêu chí");
+            ahpArray.printArray(ahpArray.Data);
             // Bắt đầu chuẩn hoá
             ahpArray.NormalizeData();
             // Xác định bộ trọng số
@@ -28,7 +32,7 @@ namespace Algorithm
             // Xác định tỷ số nhất quán
             ahpArray.CalConsistencyRatio();
             //Đọc file lựa chọn
-            ahpArray.LoadDataChooseFromCSV(choose, m);
+            ahpArray.LoadDataChoiceFromCSV(choose, m);
             ahpArray.CalSumWeightSet();
         }
     }

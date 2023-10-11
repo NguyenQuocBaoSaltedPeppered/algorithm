@@ -22,14 +22,14 @@ namespace Algorithm.Model
             }
             return result;
         }
-        protected static TData Multiply<TData>(TData a, TData b)
+        protected static TData Multiply<TData>(TData a, TData b) where TData : notnull
         {
             dynamic da = a;
             dynamic db = b;
             return da * db;
         }
 
-        protected static TData Add<TData>(TData a, TData b)
+        protected static TData Add<TData>(TData a, TData b) where TData : notnull
         {
             dynamic da = a;
             dynamic db = b;
