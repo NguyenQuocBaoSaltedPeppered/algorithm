@@ -232,7 +232,7 @@ namespace Algorithm.Model.Schema
             CI = Math.Round((LamdaMax - length)/(length - 1), 2);
             Console.WriteLine($"CI: {CI}");
             // Xác định CR
-            CR = Math.Round((CI/RI_Dictionary[length]), 2);
+            CR = Math.Round(CI/RI_Dictionary[length], 2);
             Console.WriteLine($"RI: {RI_Dictionary[length]}");
             Console.WriteLine($"CR: {CR}");
             // Bộ trọng số có được chấp nhận?

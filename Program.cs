@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Algorithm.Model.Schema;
 using Algorithm.Template.AHP;
 
@@ -8,6 +9,7 @@ namespace Algorithm
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.Unicode;
             int n, m;
             AHPFilePath ahpFilePath = AHPFilePath.instance;
             string dataFilepath = ahpFilePath.DATA_WINDOWS_FILEPATH;
