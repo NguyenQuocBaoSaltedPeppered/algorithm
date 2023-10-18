@@ -26,7 +26,7 @@ namespace Algorithm
             AHP.LoadDataFromCSV(dataFilepath, ahpArray.length, ahpArray.Data);
             Console.WriteLine("-----------------------------------");
             Console.WriteLine("Ma trận tiêu chí");
-            ahpArray.printArray(ahpArray.Data);
+            ahpArray.PrintArray(ahpArray.Data);
             // Bắt đầu chuẩn hoá
             ahpArray.NormalizeData();
             // Xác định bộ trọng số

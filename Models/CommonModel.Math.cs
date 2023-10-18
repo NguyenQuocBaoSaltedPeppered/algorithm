@@ -8,12 +8,12 @@ namespace Algorithm.Model
             int cols = Matrix_2D.GetLength(1);
             if(cols != Vector.Length)
             {
-                printError(new ArgumentException("The number of columns in the matrix must be equal to the length of the vector."));
+                PrintError(new ArgumentException("The number of columns in the matrix must be equal to the length of the vector."));
             }
             TData[] result = new TData[rows];
             for(int i = 0; i < rows; i++)
             {
-                TData sum = default(TData);
+                TData sum = default;
                 for(int j = 0; j < cols; j++)
                 {
                     sum = Add(sum, Multiply(Matrix_2D[i, j], Vector[j]));

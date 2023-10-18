@@ -59,25 +59,23 @@ namespace Algorithm.Model.Schema
         {
             try
             {
-                using (var reader = new StreamReader(csvFilePath))
-                using (var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture){Delimiter = ","}))
+                using var reader = new StreamReader(csvFilePath);
+                using var csv = new CsvReader(reader, new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = "," });
+                for (int row = 0; row < length; row++)
                 {
-                    for (int row = 0; row < length; row++)
+                    csv.Read();
+                    for (int col = 0; col < length; col++)
                     {
-                        csv.Read();
-                        for (int col = 0; col < length; col++)
-                        {
-                            array[row, col] = csv.GetField<double>(col);
-                        }
+                        array[row, col] = csv.GetField<double>(col);
                     }
                 }
                 // Console.WriteLine("-----------------------------------");
                 // Console.WriteLine("Ma trận tiêu chí");
-                // printArray(array);
+                // PrintArray(array);
             }
             catch (Exception ex)
             {
-                printError(ex);
+                PrintError(ex);
                 throw;
             }
         }
@@ -100,7 +98,7 @@ namespace Algorithm.Model.Schema
             }
             catch (Exception ex)
             {
-                printError(ex);
+                PrintError(ex);
                 throw;
             }
         }
@@ -127,12 +125,12 @@ namespace Algorithm.Model.Schema
                     }
                     Console.WriteLine("-----------------------------------");
                     Console.WriteLine("Ma trận lựa chọn");
-                    printArray(DataChoice);
+                    PrintArray(DataChoice);
                 }
             }
             catch (Exception ex)
             {
-                printError(ex);
+                PrintError(ex);
                 throw;
             }
         }
@@ -160,11 +158,11 @@ namespace Algorithm.Model.Schema
                 }
                 Console.WriteLine("-----------------------------------");
                 Console.WriteLine("Ma trận sau chuẩn hoá:");
-                printArray(NormalizedData);
+                PrintArray(NormalizedData);
             }
             catch (Exception ex)
             {
-                printError(ex);
+                PrintError(ex);
                 throw;
             }
         }
@@ -193,11 +191,11 @@ namespace Algorithm.Model.Schema
                 }
                 Console.WriteLine("-----------------------------------");
                 Console.WriteLine("Bộ trọng số:");
-                printArray(WeightSet);
+                PrintArray(WeightSet);
             }
             catch (Exception ex)
             {
-                printError(ex);
+                PrintError(ex);
                 throw;
             }
         }
@@ -214,7 +212,7 @@ namespace Algorithm.Model.Schema
             }
             Console.WriteLine("-----------------------------------");
             Console.WriteLine("Vector trọng số:");
-            printArray(WeightVector);
+            PrintArray(WeightVector);
             // Vector nhất quán
             double[] CR_Vector = new double[length];
             for(int i = 0; i < length; i++)
@@ -223,7 +221,7 @@ namespace Algorithm.Model.Schema
             }
             Console.WriteLine("-----------------------------------");
             Console.WriteLine("Vector nhất quán");
-            printArray(CR_Vector);
+            PrintArray(CR_Vector);
             Console.WriteLine("-----------------------------------");
             // Xác định LamdaMax
             LamdaMax = Math.Round(CR_Vector.Average(), 2);
