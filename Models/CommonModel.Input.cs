@@ -6,17 +6,13 @@ namespace Algorithm.Model
     {
         public static double[,] ReadDataFromFile(string filePath)
         {
-            CultureInfo customCulture = new CultureInfo("en-US");
+            CultureInfo customCulture = new("en-US");
             customCulture.NumberFormat.CurrencyDecimalSeparator = ".";
-
             CultureInfo.CurrentCulture = customCulture;
-
             string[] lines = File.ReadAllLines(filePath);
             int rows = lines.Length;
             int cols = lines[0].Split(',').Length;
-
             double[,] data = new double[rows, cols];
-
             for (int i = 0; i < rows; i++)
             {
                 string[] values = lines[i].Split(',');
@@ -33,23 +29,7 @@ namespace Algorithm.Model
                     }
                 }
             }
-
             return data;
-        }
-
-        public static void PrintArray(double[,] array)
-        {
-            int rows = array.GetLength(0);
-            int cols = array.GetLength(1);
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    Console.Write($"{array[i, j]}       ");
-                }
-                Console.WriteLine();
-            }
         }
     }
 }

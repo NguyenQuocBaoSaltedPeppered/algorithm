@@ -68,5 +68,50 @@ namespace Algorithm.Model
             }
             return result;
         }
+        /// <summary>
+        /// Hàm lấy dữ liệu 1 hàng trong mảng 2 chiều
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="rowNumber"></param>
+        /// <typeparam name="TData"></typeparam>
+        /// <returns></returns>
+        public static TData[] GetRow<TData>(TData[,] matrix, int rowNumber)
+        {
+            return Enumerable.Range(0, matrix.GetLength(1))
+                .Select(x => matrix[rowNumber, x])
+                .ToArray();
+        }
+        /// <summary>
+        /// Hàm lấy dữ liệu 1 cột trong mảng 2 chiều
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="columnNumber"></param>
+        /// <typeparam name="TData"></typeparam>
+        /// <returns></returns>
+        public static TData[] GetCollumn<TData>(TData[,] matrix, int columnNumber)
+        {
+            return Enumerable.Range(0, matrix.GetLength(0))
+                .Select(x => matrix[x, columnNumber])
+                .ToArray();
+        }
+        /// <summary>
+        /// Hàm nhận vào 1 ma trận vuông, đọc phần tam giác trên,
+        /// chuyển nó thành 1 ma trận đối xứng
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <typeparam name="TData"></typeparam>
+        /// <returns></returns>
+        public static void MakeSymmetric<TData>(TData[,] matrix)
+        {
+            int n = matrix.GetLength(0);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = i; j < n; j++)
+                {
+                    // Lấy giá trị từ tam giác trên và gán cho tam giác dưới
+                    matrix[j, i] = matrix[i, j];
+                }
+            }
+        }
     }
 }

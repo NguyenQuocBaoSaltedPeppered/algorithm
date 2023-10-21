@@ -2,7 +2,7 @@ namespace Algorithm.Template.AHP
 {
     public class AHPFilePath
     {
-        private static AHPFilePath _instance;
+        private static AHPFilePath _instance = null!;
         #region windowsPath
         public string DATA_WINDOWS_FILEPATH { get; private set; }
         public string CHOICE_WINDOWS_FILEPATH { get; private set; }
@@ -22,10 +22,7 @@ namespace Algorithm.Template.AHP
         {
             get
             {
-                if(_instance == null)
-                {
-                    _instance = new AHPFilePath();
-                }
+                _instance ??= new AHPFilePath();
                 return _instance;
             }
         }
