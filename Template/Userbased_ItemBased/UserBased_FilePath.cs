@@ -11,10 +11,10 @@ namespace Algorithm.Template.UserBased
         #endregion
         private UserBased_FilePath()
         {
-            DATA_WINDOWS_FILEPATH = @".\Template\AHP\AHP_data.csv";
-            DATA_MAC_FILEPATH = @"./Template/AHP/AHP_data.csv";
+            DATA_WINDOWS_FILEPATH = @".\Template\UserBased_ItemBased\UserBased.csv";
+            DATA_MAC_FILEPATH = @"./Template/UserBased_ItemBased/UserBased.csv";
         }
-        public static UserBased_FilePath instance
+        public static UserBased_FilePath Instance
         {
             get
             {
